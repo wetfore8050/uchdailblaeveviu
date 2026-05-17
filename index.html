@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+
+<title>ダム監視UI</title>
+
+<style>
+
+:root {
+    --damlef: 700px;
+    --damtop: 145px;
+    --damwid: 80px;
+    --damhei: 670px;
+
+    --waterlev: 140px;
+}
+
+body {
+
+    margin: 0;
+
+    background: #dddddd;
+
+    font-family: sans-serif;
+
+    overflow-x: auto;
+
+}
+
+/*
+  全体中央配置
+*/
+
+#wrapper {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+}
+
+/*
+  縮小用
+*/
+
+#scale-container {
+
+    transform-origin: top left;
+
+}
+
+/*
+  描画領域
+*/
+
+#canvas {
+
+    position: relative;
+
+    width: 1280px;
+
+    height: 720px;
+
+    background: #eeeeee;
+
+    overflow: hidden;
+
+}
+
+/*
+  現在時刻
+*/
+
+#time {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 10px;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+}
+
+/*
+  左説明ボックス
+*/
+
+
+
+
+
+/*
+  水平ライン
+*/
+
+#water-line {
+
+    position: absolute;
+
+    left: 300px;
+
+    top: var(--waterlev);
+
+    width: 980px;
+
+    height: 5px;
+
+    background: rgba(0,120,220,0.4);
+
+}
+
+/*
+  水色部分
+*/
+
+#water-area {
+
+    position: absolute;
+    left: 785px;
+    top: calc(var(--waterlev) + 5px);
+    width: 590px;
+    height: calc(460px - var(--waterlev));
+    background: rgba(0,170,230,0.9);
+
+}
+
+/*
+  灰色部分
+*/
+
+#gray-area {
+
+    position: absolute;
+
+    left: 785px;
+
+    top: 460px;
+
+    width: 590px;
+
+    height: 330px;
+
+    background: rgba(180,180,180,0.95);
+
+}
+
+/*
+  ダム本体
+*/
+
+#dam-body {
+
+    position: absolute;
+
+    left: var(--damlef);
+    top: var(--damtop);
+    width: var(--damwid);
+    height: var(--damhei);
+
+    background: #efe6b5;
+    clip-path: polygon(23.4px 0%, 100% 0%, 100% 100%, 0% 100%);
+    /*border: 4px solid black;*/
+
+    /*box-shadow: 0 0 0 4px black inset;*/
+
+    /*transform: skewX(-2deg);*/
+
+}
+
+#dam-body-back {
+    position: absolute;
+    left: calc(var(--damlef) - 5px);
+    top: calc(var(--damtop) - 5px);
+    width: calc(var(--damwid) + 10px);
+    height: calc(var(--damhei) + 10px);
+    background: black;
+    clip-path: polygon(23.4px 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/*
+  左青三角
+*/
+
+#left-arrow {
+
+    position: absolute;
+    left: 240px;
+    top: calc(var(--waterlev) - 25px);
+    width: 0;
+    height: 0;
+    border-top: 28px solid transparent;
+    border-bottom: 28px solid transparent;
+    border-left: 65px solid rgba(0,170,230,0.9);
+
+}
+
+/*
+  流入矢印
+*/
+
+#in-arrow {
+
+    position: absolute;
+    right: 85px;
+    top: 30px;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-right: 95px solid rgba(0,170,230,0.9);
+
+}
+
+/*
+  流入四角
+*/
+
+#in-label {
+
+    position: absolute;
+    right: 0;
+    top: 30px;
+    width: 85px;
+    height: 100px;
+    background: rgba(0,170,230,0.9);
+
+    color: white;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    font-size: 24px;
+
+
+    padding-top: 8px;
+
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.1;
+
+}
+
+/*
+  放流矢印
+*/
+
+#out-arrow {
+
+    position: absolute;
+
+    left: 606px;
+
+    top: 350px;
+
+    width: 0;
+
+    height: 0;
+
+    border-top: 50px solid transparent;
+
+    border-bottom: 50px solid transparent;
+
+    border-right: 95px solid rgba(0,170,230,0.9);
+
+}
+
+/*
+  放流ラベル
+*/
+
+#out-label {
+
+    position: absolute;
+    left: 700px;
+    top: 350px;
+    width: 85px;
+    height: 100px;
+    background: rgba(0,170,230,0.9);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.1;
+
+}
+
+/*
+  貯水位表示
+*/
+
+#water-level {
+
+    position: absolute;
+    left: 50px;
+    top: calc(var(--waterlev) - 35px);
+    width: 180px;
+    color: #0070c8;
+    font-weight: bold;
+    text-align: center;
+    font-size: 28px;
+    line-height: 1.2;
+
+}
+
+/*
+  貯水率
+*/
+
+#storage-rate {
+
+    position: absolute;
+
+    left: 900px;
+
+    top: 500px;
+
+    text-align: center;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+}
+
+/*
+  満水比率
+*/
+
+#full-rate {
+
+    position: absolute;
+
+    left: 1080px;
+
+    top: 500px;
+
+    text-align: center;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+}
+
+/*
+  補足ボックス
+*/
+
+
+
+/*
+  吹き出し
+*/
+
+#top-box::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 90px;
+
+    bottom: -30px;
+
+    width: 0;
+
+    height: 0;
+
+    border-left: 30px solid transparent;
+
+    border-right: 30px solid transparent;
+
+    border-top: 30px solid rgba(255,255,255,0.85);
+
+}
+
+#dam-image {
+    position: absolute;
+    left: 235px;
+    top: 100px;
+    width: 485px;
+    clip-path: polygon(69px 40px, 100% 40px, 100% 100%, 69px 100%);
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="scale-container">
+
+
+<div id="canvas">
+
+    <!-- 時刻 -->
+    <img
+        id="dam-image"
+        src="dam.png"
+    >
+
+    <div id="time">
+
+        **/** **:** 現在
+
+    </div>
+
+    <!-- 左説明 -->
+
+
+    <!-- 上説明 -->
+
+
+    <!-- 水平線 -->
+
+    <div id="water-line"></div>
+
+    <!-- 水色 -->
+
+    <div id="water-area"></div>
+
+    <!-- 灰色 -->
+
+    <div id="gray-area"></div>
+
+    <!-- ダム -->
+    <div id="dam-body-back"></div>
+    <div id="dam-body"></div>
+
+
+    <!-- 左三角 -->
+
+    <div id="left-arrow"></div>
+
+    <!-- 貯水位 -->
+
+    <div id="water-level">
+
+        貯水位 EL.<br>
+
+        （高さ）m
+
+    </div>
+
+    <!-- 流入 -->
+
+    <div id="in-arrow"></div>
+
+    <div id="in-label">
+
+        流入<br>
+
+        （量）
+
+    </div>
+
+    <!-- 放流 -->
+
+    <div id="out-arrow"></div>
+
+    <div id="out-label">
+
+        放流<br>
+
+        （量）
+
+    </div>
+
+    <!-- 貯水率 -->
+
+    <div id="storage-rate">
+
+        貯水率<br>
+
+        **.**%
+
+    </div>
+
+    <!-- 満水比率 -->
+
+    <div id="full-rate">
+
+        満水比率<br>
+
+        **.**%
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/*
+  画面幅に応じて縮小
+*/
+
+function resizeCanvas() {
+
+    const scaleContainer =
+        document.getElementById(
+            "scale-container"
+        );
+
+    const width =
+        window.innerWidth - 20;
+
+    const scale =
+        Math.min(
+            1,
+            width / 1280
+        );
+
+    scaleContainer.style.transform =
+        `scale(${scale})`;
+
+    scaleContainer.style.height =
+        (720 * scale) + "px";
+}
+
+resizeCanvas();
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+</script>
+<script>
+    async function loadDamData() {
+        const url = "https://damsystem-26.kansuu805030.workers.dev/";
+
+        try{
+            const response = await fetch(url);
+            const json = await response.json();
+            const items = json.tableData.itemDataList;
+
+            let waterLevelValue = null;
+
+            for (const item of items) {
+                const latest = item.dataList[item.dataList.length - 1];
+
+                if (item.dispName === "貯水位") {
+                    waterLevelValue = parseFloat(latest.data);
+                    document.getElementById("waterLevel")
+                        .innerText = latest.data;
+                    
+                    document.getElementById("water-level").innerHTML =
+                        `貯水位 EL.<br>${latest.data}m`;
+                }
+
+                if (item.dispName === "流入量") {
+                    document.getElementById("inflow")
+                        .innerText = latest.data;
+                    
+                    document.getElementById("in-label").innerHTML =
+                        `流入<br>${latest.data}m³/s`;
+                }
+
+                if (item.dispName === "放流量") {
+                    document.getElementById("outflow")
+                        .innerText = latest.data;
+
+                    // #out-label の（量）部分を更新
+                    document.getElementById("out-label").innerHTML =
+                        `放流<br>${latest.data}<br>m³/s`;
+                }
+                
+
+            }
+            if (waterLevelValue != null) {
+                let waterlev;
+
+                if (waterLevelValue >= 159) {
+                    waterlev = -18 * waterLevelValue + 3038;
+                } else if (waterLevelValue >= 152.5) {
+                    waterlev = -10.4615 * waterLevelValue + 1839.385;
+                } else if (waterLevelValue >= 146.5) {
+                    waterlev = -15.1667 * waterLevelValue + 2556.917;
+                } else {
+                    waterlev = -12 * waterLevelValue + 2093;
+                }
+
+                document.documentElement.style.setProperty(
+                    "--waterlev", `${waterlev}px`
+                );
+            }
+
+            document.getElementById("obsTime")
+                .innerText = json.tableData.obsTime;
+            
+        } catch (error) {
+            console.error(error);
+            alert("データ取得失敗")
+        }
+        
+    }
+</script>
+
+</body>
+
+</html>
