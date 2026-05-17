@@ -12,7 +12,7 @@
     --damlef: 700px;
     --damtop: 145px;
     --damwid: 80px;
-    --damhei: 670px;
+    --damhei: 570px;
 
     --waterlev: 140px;
 }
@@ -32,6 +32,45 @@ body {
 /*
   全体中央配置
 */
+#dam-status-title {
+    position: absolute;
+    left: 0;
+    top: 760px;
+    width: 1280px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    text-decoration: underline;
+    font-family: "MS Gothic", "游ゴシック", sans-serif;
+}
+/* 放流・貯水位ラベル */
+#dam-status-label {
+    position: absolute;
+    left: 50px;
+    top: 810px;
+    font-size: 24px;
+    font-weight: bold;
+    color: red;
+    font-family: "MS Gothic", "游ゴシック", sans-serif;
+}
+
+/* 特になしボックス */
+#dam-status-box {
+    position: absolute;
+    left: 120px;
+    top: 845px;
+    width: 1050px;
+    height: 70px;
+    border: 3px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: red;
+    font-family: "MS Gothic", "游ゴシック", sans-serif;
+}
+
 
 #wrapper {
 
@@ -67,7 +106,7 @@ body {
 
     width: 1280px;
 
-    height: 720px;
+    height: 1700px;
 
     background: #eeeeee;
 
@@ -150,7 +189,7 @@ body {
 
     width: 590px;
 
-    height: 330px;
+    height: 260px;
 
     background: rgba(180,180,180,0.95);
 
@@ -413,6 +452,14 @@ body {
 
 
 <div id="canvas">
+        <!-- ダム現況タイトル -->
+    <div id="dam-status-title">ダム現況</div>
+
+    <!-- 放流・貯水位ラベル -->
+    <div id="dam-status-label">放流・貯水位に関する情報</div>
+
+    <!-- 特になしボックス -->
+    <div id="dam-status-box">特になし</div>
 
     <!-- 時刻 -->
     <img
@@ -506,6 +553,215 @@ body {
         **.**%
 
     </div>
+<!-- 上流・下流・降水量テーブル群 -->
+<div id="info-tables" style="
+    position: absolute;
+    left: 15px;
+    top: 940px;
+    width: 1250px;
+    font-family: sans-serif;
+    font-size: 13px;
+">
+
+  <!-- 河川水位・流量 -->
+  <div style="margin-bottom: 14px;">
+    <div style="font-size:14px; font-weight:bold; margin-bottom:4px;">■上流・下流の状況（河川水位・流量）</div>
+    <table style="border-collapse:collapse; width:100%; table-layout:fixed;">
+      <colgroup>
+        <col style="width:9%"><col style="width:5%"><col style="width:9%"><col style="width:5%">
+        <col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:6%">
+        <col style="width:9%"><col style="width:6%"><col style="width:9%">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">亀ヶ淵</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">→</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">竜神ダム</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">→</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;" colspan="7">山田川</td>
+        </tr>
+        <tr>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(3km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(1km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">長戸呂</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(13km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">岩本橋</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(4km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">和田</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(5km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">常井橋</td>
+        </tr>
+        <tr>
+          <td id="kame-wl"   style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">水位</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="nagato-wl" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="iwamoto-wl" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="wada-wl"   style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="tsunoi-wl" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+        </tr>
+        <tr>
+          <td id="kame-ch"   style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#fff;border:1px solid #888;text-align:center;padding:4px;font-size:11px;">（前1時間変化量）</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="nagato-ch" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="iwamoto-ch" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="wada-ch"   style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="tsunoi-ch" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○m</td>
+        </tr>
+        <tr>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">流量</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="tsunoi-flow" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○m³/s</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 降水量 -->
+  <div style="margin-bottom:14px;">
+    <div style="font-size:14px; font-weight:bold; margin-bottom:4px;">■上流・下流の状況（降水量）</div>
+    <table style="border-collapse:collapse; width:100%; table-layout:fixed;">
+      <colgroup>
+        <col style="width:8%"><col style="width:9%"><col style="width:7%">
+        <col style="width:9%"><col style="width:6%"><col style="width:9%">
+        <col style="width:7%"><col style="width:11%">
+        <col style="width:9%"><col style="width:9%">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td style="background:#a8d4f0;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">持方</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">→</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">竜神ダム</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">→</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;" colspan="3">山田川</td>
+          <td style="background:#888;color:#fff;border:1px solid #888;text-align:center;padding:4px;">（参考）徳田</td>
+          <td style="background:#888;color:#fff;border:1px solid #888;text-align:center;padding:4px;">（参考）中野</td>
+        </tr>
+        <tr>
+          <td style="background:#a8d4f0;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(11km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(4km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">天下野</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">(6km)</td>
+          <td style="background:#a8d4f0;border:1px solid #888;text-align:center;padding:4px;">水府支所</td>
+          <td style="background:#bbb;border:1px solid #888;padding:4px;"></td>
+          <td style="background:#bbb;border:1px solid #888;padding:4px;"></td>
+        </tr>
+        <tr>
+          <td style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">1時間</td>
+          <td id="mochik-1h"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="dam-1h"     style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="tengano-1h" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#e8f4fb;border:1px solid #888;padding:4px;"></td>
+          <td id="suifu-1h"   style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tokuda-1h"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nakano-1h"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+        </tr>
+        <tr>
+          <td style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">24時間</td>
+          <td id="mochik-24h"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="dam-24h"     style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="tengano-24h" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td style="background:#fff;border:1px solid #888;padding:4px;"></td>
+          <td id="suifu-24h"   style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tokuda-24h"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nakano-24h"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 長期間の降水量 -->
+  <div>
+    <div style="font-size:14px; font-weight:bold; margin-bottom:4px;">■長期間の降水量（徳田・中野）</div>
+    <table style="border-collapse:collapse; width:100%; table-layout:fixed;">
+      <colgroup>
+        <col style="width:16%">
+        <col style="width:12%"><col style="width:12%"><col style="width:12%">
+        <col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:12%">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td id="longrain-title" style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">○/○までの合計降水量</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前10日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前20日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前30日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前45日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前60日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前90日</td>
+          <td style="background:#1a7fc1;color:#fff;border:1px solid #888;text-align:center;padding:4px;">前120日</td>
+        </tr>
+        <tr>
+          <td style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">【上流】徳田</td>
+          <td id="tok-10"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-20"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-30"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-45"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-60"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-90"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="tok-120" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+        </tr>
+        <tr>
+          <td style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">平年比</td>
+          <td id="tok-10r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-20r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-30r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-45r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-60r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-90r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="tok-120r" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+        </tr>
+        <tr>
+          <td style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">【下流】中野</td>
+          <td id="nak-10"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-20"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-30"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-45"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-60"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-90"  style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+          <td id="nak-120" style="background:#e8f4fb;border:1px solid #888;text-align:center;padding:4px;">○○mm</td>
+        </tr>
+        <tr>
+          <td style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">平年比</td>
+          <td id="nak-10r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-20r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-30r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-45r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-60r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-90r"  style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+          <td id="nak-120r" style="background:#fff;border:1px solid #888;text-align:center;padding:4px;">○○%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
 
 </div>
 
@@ -566,24 +822,24 @@ window.addEventListener(
 
                 if (item.dispName === "貯水位") {
                     waterLevelValue = parseFloat(latest.data);
-                    //document.getElementById("waterLevel")
-                    //    .innerText = latest.data;
+                    document.getElementById("waterLevel")
+                        .innerText = latest.data;
                     
                     document.getElementById("water-level").innerHTML =
                         `貯水位 EL.<br>${latest.data}m`;
                 }
 
                 if (item.dispName === "流入量") {
-                    //document.getElementById("inflow")
-                    //    .innerText = latest.data;
+                    document.getElementById("inflow")
+                        .innerText = latest.data;
                     
                     document.getElementById("in-label").innerHTML =
                         `流入<br>${latest.data}m³/s`;
                 }
 
                 if (item.dispName === "放流量") {
-                    //document.getElementById("outflow")
-                    //    .innerText = latest.data;
+                    document.getElementById("outflow")
+                        .innerText = latest.data;
 
                     // #out-label の（量）部分を更新
                     document.getElementById("out-label").innerHTML =
@@ -610,8 +866,8 @@ window.addEventListener(
                 );
             }
 
-            //document.getElementById("obsTime")
-            //    .innerText = json.tableData.obsTime;
+            document.getElementById("obsTime")
+                .innerText = json.tableData.obsTime;
             
         } catch (error) {
             console.error(error);
@@ -619,7 +875,6 @@ window.addEventListener(
         }
         
     }
-loadDamData();
 </script>
 
 </body>
