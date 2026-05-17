@@ -566,24 +566,24 @@ window.addEventListener(
 
                 if (item.dispName === "貯水位") {
                     waterLevelValue = parseFloat(latest.data);
-                    document.getElementById("waterLevel")
-                        .innerText = latest.data;
+                    //document.getElementById("waterLevel")
+                    //    .innerText = latest.data;
                     
                     document.getElementById("water-level").innerHTML =
                         `貯水位 EL.<br>${latest.data}m`;
                 }
 
                 if (item.dispName === "流入量") {
-                    document.getElementById("inflow")
-                        .innerText = latest.data;
+                    //document.getElementById("inflow")
+                    //    .innerText = latest.data;
                     
                     document.getElementById("in-label").innerHTML =
                         `流入<br>${latest.data}m³/s`;
                 }
 
                 if (item.dispName === "放流量") {
-                    document.getElementById("outflow")
-                        .innerText = latest.data;
+                    //document.getElementById("outflow")
+                    //    .innerText = latest.data;
 
                     // #out-label の（量）部分を更新
                     document.getElementById("out-label").innerHTML =
@@ -610,8 +610,8 @@ window.addEventListener(
                 );
             }
 
-            document.getElementById("obsTime")
-                .innerText = json.tableData.obsTime;
+            //document.getElementById("obsTime")
+            //    .innerText = json.tableData.obsTime;
             
         } catch (error) {
             console.error(error);
